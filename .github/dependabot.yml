@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directories: 
+      - "/"
+      - "./"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+      time: "17:00"
+      timezone: "America/Chicago"
