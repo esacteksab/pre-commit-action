@@ -1,20 +1,8 @@
-this action is in maintenance-only mode and will not be accepting new features.
+# pre-commit/action
 
-generally you want to use [pre-commit.ci] which is faster and has more features.
+This is a fork of the GitHub [pre-commit/action](https://github.com/pre-commit/action) to run [pre-commit](https://pre-commit.com), which is in maintenance mode only. In pins the `action/cache` in `action.yml` so that you can [require that all actions are pinned to full-length commit SHA's](https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/).
 
-[pre-commit.ci]: https://pre-commit.ci
-
-___
-
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/pre-commit/action/main.svg)](https://results.pre-commit.ci/latest/github/pre-commit/action/main)
-[![Build Status](https://github.com/pre-commit/action/actions/workflows/main.yml/badge.svg)](https://github.com/pre-commit/action/actions)
-
-pre-commit/action
-=================
-
-a GitHub action to run [pre-commit](https://pre-commit.com)
-
-### using this action
+## using this action
 
 To use this action, make a file `.github/workflows/pre-commit.yml`.  Here's a
 template to get started:
@@ -27,13 +15,18 @@ on:
   push:
     branches: [main]
 
+permissions:
+    contents: read
+
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v3
-    - uses: pre-commit/action@v3.0.1
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 #v5.0.0
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c #v6.0.0
+    - uses: esacteksab/pre-commit-action@4563f702b4348f0109ef6a450d90f917067815e3 #v0.1.0
 ```
 
 This does a few things:
@@ -44,14 +37,12 @@ This does a few things:
 
 ### using this action with custom invocations
 
-By default, this action runs all the hooks against all the files.  `extra_args`
-lets users specify a single hook id and/or options to pass to `pre-commit run`.
+By default, this action runs all the hooks against all the files. `extra_args` lets users specify a single hook id and/or options to pass to `pre-commit run`.
 
-Here's a sample step configuration that only runs the `flake8` hook against all
-the files (use the template above except for the `pre-commit` action):
+Here's a sample step configuration that only runs the `flake8` hook against all the files (use the template above except for the `pre-commit` action):
 
 ```yaml
-    - uses: pre-commit/action@v3.0.1
+    - uses: esacteksab/pre-commit-action@4563f702b4348f0109ef6a450d90f917067815e3 #v0.1.0
       with:
         extra_args: flake8 --all-files
 ```
@@ -62,6 +53,7 @@ prior to v3.0.0, this action had custom behaviour which pushed changes back to
 the pull request when supplied with a `token`.
 
 this behaviour was removed:
+
 - it required a PAT (didn't work with short-lived `GITHUB_TOKEN`)
 - properly hiding this `input` from the installation and execution of hooks
   is intractable in github actions (it is readily available as `$INPUT_TOKEN`)
